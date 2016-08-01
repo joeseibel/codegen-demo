@@ -1,0 +1,52 @@
+package codegen_demo::integration
+public
+
+with codegen_demo::platform;
+with codegen_demo::actuator;
+with codegen_demo::sensor;
+with codegen_demo::filtering;
+with pok;
+
+process single_process
+properties
+	POK::Needed_Memory_Size => 200 KByte;
+end single_process;
+
+process implementation single_process.i
+subcomponents
+	sensor0   : thread codegen_demo::sensor::sensor_thr.i;
+	sensor1   : thread codegen_demo::sensor::sensor_thr.i;
+	filter   : thread codegen_demo::filtering::filtering_thr.i;
+	actuator : thread codegen_demo::actuator::actuator_thr.i;
+connections
+	c0 : port sensor0.altitude_value -> filter.altitude_in0;
+	c1 : port sensor1.altitude_value -> filter.altitude_in1;
+	c2 : port filter.altitude -> actuator.altitude_in;
+end single_process.i;
+
+
+system integration
+end integration;
+
+system implementation integration.single_partition
+subcomponents
+--	module : processor codegen_demo::platform::cpu_1part.generic;
+	ram    : memory codegen_demo::platform::ram.one_part;
+	pr     : process single_process.i;
+properties
+	
+	actual_memory_binding => (reference (ram.s1)) applies to pr;
+end integration.single_partition;
+
+
+system implementation integration.single_partition_pok extends integration.single_partition
+subcomponents
+	module : processor  codegen_demo::platform::cpu_1part.pok;
+--	ram    : memory     codegen_demo::platform::ram.one_part;
+properties
+	POK::Needed_Memory_Size => 200 KByte applies to pr;
+	actual_processor_binding => (reference (module.partition1)) applies to pr;
+end integration.single_partition_pok;
+
+
+end codegen_demo::integration;
