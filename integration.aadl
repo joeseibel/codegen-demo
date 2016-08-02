@@ -22,6 +22,8 @@ connections
 	c0 : port sensor0.altitude_value -> filter.altitude_in0;
 	c1 : port sensor1.altitude_value -> filter.altitude_in1;
 	c2 : port filter.altitude -> actuator.altitude_in;
+properties
+	POK::Needed_Memory_Size => 200 KByte;
 end single_process.i;
 
 
@@ -42,11 +44,45 @@ end integration.single_partition;
 system implementation integration.single_partition_pok extends integration.single_partition
 subcomponents
 	module : processor  codegen_demo::platform::cpu_1part.pok;
---	ram    : memory     codegen_demo::platform::ram.one_part;
 properties
 	POK::Needed_Memory_Size => 200 KByte applies to pr;
 	actual_processor_binding => (reference (module.partition1)) applies to pr;
+	actual_memory_binding => (reference (ram.s1)) applies to pr;
+	byte_count => 200000 applies to ram.s1;
 end integration.single_partition_pok;
 
+
+system implementation integration.four_partitions
+subcomponents
+--	module : processor codegen_demo::platform::cpu_1part.generic;
+	ram     : memory codegen_demo::platform::ram.four_parts;
+	sensor0 : process codegen_demo::sensor::sensor.i;
+	sensor1 : process codegen_demo::sensor::sensor.i;
+	filter  : process codegen_demo::filtering::filtering.i;
+	act     : process codegen_demo::actuator::actuator.i;
+connections
+	c0 : port sensor0.altitude_value -> filter.altitude_in0;
+	c1 : port sensor1.altitude_value -> filter.altitude_in1;
+	c2 : port filter.altitude -> act.altitude_in;
+end integration.four_partitions;
+
+
+system implementation integration.four_partitions_pok extends integration.four_partitions
+subcomponents
+	module : processor  codegen_demo::platform::cpu_4parts.pok;
+properties
+	actual_processor_binding => (reference (module.partition1)) applies to sensor0;
+	actual_processor_binding => (reference (module.partition2)) applies to sensor1;
+	actual_processor_binding => (reference (module.partition3)) applies to filter;
+	actual_processor_binding => (reference (module.partition4)) applies to act;
+	actual_memory_binding => (reference (ram.s0)) applies to sensor0;
+	actual_memory_binding => (reference (ram.s1)) applies to sensor1;
+	actual_memory_binding => (reference (ram.s2)) applies to filter;
+	actual_memory_binding => (reference (ram.s3)) applies to act;
+	byte_count => 200000 applies to ram.s0;
+	byte_count => 200000 applies to ram.s1;
+	byte_count => 200000 applies to ram.s2;
+	byte_count => 200000 applies to ram.s3;
+end integration.four_partitions_pok;
 
 end codegen_demo::integration;

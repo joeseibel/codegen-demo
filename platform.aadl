@@ -10,12 +10,13 @@ end segment;
 memory ram
 end ram;
 
-memory implementation ram.three_parts
+memory implementation ram.four_parts
 subcomponents
+	s0 : memory segment;
 	s1 : memory segment;
 	s2 : memory segment;
 	s3 : memory segment;
-end ram.three_parts;
+end ram.four_parts;
 
 memory implementation ram.one_part
 subcomponents
@@ -154,24 +155,26 @@ end cpu_1part.pok;
 --  Platform with 3 partitions. We define a platform for our three OS: POK, DeOS and VxWorks
 --
 
-processor cpu_3parts extends cpu
-end cpu_3parts;
+processor cpu_4parts extends cpu
+end cpu_4parts;
 
-processor implementation cpu_3parts.generic
+processor implementation cpu_4parts.generic
 subcomponents
 	partition1 : virtual processor partition.generic;
 	partition2 : virtual processor partition.generic;
 	partition3 : virtual processor partition.generic;
-end cpu_3parts.generic;
+	partition4 : virtual processor partition.generic;
+end cpu_4parts.generic;
 
 
-processor implementation cpu_3parts.vxworks extends cpu_3parts.generic
+processor implementation cpu_4parts.vxworks extends cpu_4parts.generic
 subcomponents
 	partition1 : refined to virtual processor partition.vxworks;
 	partition2 : refined to virtual processor partition.vxworks;
 	partition3 : refined to virtual processor partition.vxworks;
+	partition4 : refined to virtual processor partition.vxworks;
 properties
-	ARINC653::Module_Major_Frame => 1500 ms;
+	ARINC653::Module_Major_Frame => 2000 ms;
 	ARINC653::Module_Schedule => 
 	    ( [Partition => reference (partition1);
 	      Duration  => 500 ms;
@@ -180,6 +183,9 @@ properties
 	      Duration  => 500 ms;
 	      Periodic_Processing_Start => false;],
 	      [Partition => reference (partition3);
+	      Duration  => 500 ms;
+	      Periodic_Processing_Start => false;],
+	      [Partition => reference (partition4);
 	      Duration  => 500 ms;
 	      Periodic_Processing_Start => false;]
 	    );
@@ -206,16 +212,17 @@ properties
 		[ErrorIdentifier => 7 ; Description => "Ignore the error"; Action => "ignore";],
 		[ErrorIdentifier => 8 ; Description => "Ignore the error"; Action => "ignore";]
 	);
-end cpu_3parts.vxworks;
+end cpu_4parts.vxworks;
 
 
-processor implementation cpu_3parts.deos extends cpu_3parts.generic
+processor implementation cpu_4parts.deos extends cpu_4parts.generic
 subcomponents
 	partition1 : refined to virtual processor partition.deos;
 	partition2 : refined to virtual processor partition.deos;
 	partition3 : refined to virtual processor partition.deos;
+	partition4 : refined to virtual processor partition.deos;
 properties
-	ARINC653::Module_Major_Frame => 1500 ms;
+	ARINC653::Module_Major_Frame => 2000 ms;
 	ARINC653::Module_Schedule => 
 	    ( [Partition => reference (partition1);
 	      Duration  => 500 ms;
@@ -224,6 +231,9 @@ properties
 	      Duration  => 500 ms;
 	      Periodic_Processing_Start => false;],
 	      [Partition => reference (partition3);
+	      Duration  => 500 ms;
+	      Periodic_Processing_Start => false;],
+	      [Partition => reference (partition4);
 	      Duration  => 500 ms;
 	      Periodic_Processing_Start => false;]
 	    );
@@ -250,20 +260,22 @@ properties
 		[ErrorIdentifier => 7 ; Description => "Ignore the error"; Action => "ignore";],
 		[ErrorIdentifier => 8 ; Description => "Ignore the error"; Action => "ignore";]
 	);
-end cpu_3parts.deos;
+end cpu_4parts.deos;
 
 
-processor implementation cpu_3parts.pok extends cpu_3parts.generic
+processor implementation cpu_4parts.pok extends cpu_4parts.generic
 subcomponents
 	partition1 : refined to virtual processor partition.pok;
 	partition2 : refined to virtual processor partition.pok;
 	partition3 : refined to virtual processor partition.pok;
+	partition4 : refined to virtual processor partition.pok;
 properties
-	pok::major_frame => 1500 ms;
-	pok::slots => (500 ms, 500 ms, 500 ms);
-	pok::slots_allocation => (reference (partition1), reference (partition2), reference (partition3));
+	pok::major_frame => 2000 ms;
+	pok::slots => (500 ms, 500 ms, 500 ms, 500 ms);
+	pok::slots_allocation => (reference (partition1), reference (partition2), reference (partition3), reference (partition4));
 	pok::bsp => x86_qemu;
 	pok::architecture => x86;
-end cpu_3parts.pok;
+	POK::Scheduler => static;
+end cpu_4parts.pok;
 
 end codegen_demo::platform;

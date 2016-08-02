@@ -4,6 +4,18 @@ public
 with codegen_demo::datatypes;
 with arinc653;
 
+process sensor
+features
+	altitude_value : out data port codegen_demo::datatypes::altitude {arinc653::sampling_refresh_period => 10 ms;};
+end sensor;
+
+process implementation sensor.i
+subcomponents
+	thr : thread sensor_thr.i;
+connections
+	c0 : port thr.altitude_value -> altitude_value;
+end sensor.i;
+
 process sensors
 features
 	altitude_value0 : out data port codegen_demo::datatypes::altitude {arinc653::sampling_refresh_period => 10 ms;};
