@@ -51,6 +51,27 @@ properties
 	byte_count => 200000 applies to ram.s1;
 end integration.single_partition_pok;
 
+system implementation integration.single_partition_deos extends integration.single_partition
+subcomponents
+	module : processor  codegen_demo::platform::cpu_1part.deos;
+properties
+	POK::Needed_Memory_Size => 200 KByte applies to pr;
+	actual_processor_binding => (reference (module.partition1)) applies to pr;
+	actual_memory_binding => (reference (ram.s1)) applies to pr;
+	byte_count => 200000 applies to ram.s1;
+end integration.single_partition_deos;
+
+system implementation integration.single_partition_vxworks extends integration.single_partition
+subcomponents
+	module : processor  codegen_demo::platform::cpu_1part.vxworks;
+properties
+	POK::Needed_Memory_Size => 200 KByte applies to pr;
+	actual_processor_binding => (reference (module.partition1)) applies to pr;
+	actual_memory_binding => (reference (ram.s1)) applies to pr;
+	byte_count => 200000 applies to ram.s1;
+	Source_Name => "partition1" applies to module.partition1;
+end integration.single_partition_vxworks;
+
 
 system implementation integration.four_partitions
 subcomponents

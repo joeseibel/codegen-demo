@@ -61,8 +61,6 @@ end cpu_1part;
 processor implementation cpu_1part.generic
 subcomponents
 	partition1 : virtual processor partition.generic;
-	partition2 : virtual processor partition.generic;
-	partition3 : virtual processor partition.generic;
 end cpu_1part.generic;
 
 

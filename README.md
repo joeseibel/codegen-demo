@@ -32,7 +32,7 @@ In order to generate the code, you can do the following:
  * Select the system in the outline view. Right click, select Ocarina
    menu and then the appropriate code generator
 
-# Compile the code for POK
+# Compile & run the code for POK
  * Install POK on your system. Make sure the x86 toolchain is working
  * Copy the functional code in the partitions. For the single partition
    example, copy all the c files into the partition directory (generated-code/module/pr).
@@ -41,6 +41,12 @@ In order to generate the code, you can do the following:
    generated-code/module/sensor0, generated-code/module/sensor1)
  * Compile and run: ```make clean all run```
  
- 
+
+# Compile & run the code for VxWorks
+
+
+
+# Compile & run the code for DeOS
+
 # Notes
  * The POK demo has been tested on Linux
