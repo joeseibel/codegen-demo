@@ -104,10 +104,12 @@ processor implementation cpu_1part.deos extends cpu_1part.generic
 subcomponents
 	partition1 : refined to virtual processor partition.deos;
 properties
-	ARINC653::Module_Major_Frame => 1500 ms;
+    period => 1250 ms applies to partition1;
+    execution_time => 1000 ms applies to partition1;
+	ARINC653::Module_Major_Frame => 1250 ms;
 	ARINC653::Module_Schedule => 
 	    ( [Partition => reference (partition1);
-	      Duration  => 1500 ms;
+	      Duration  => 1250 ms;
 	      Periodic_Processing_Start => false;]
 	    );
 	ARINC653::HM_Error_ID_Levels => 

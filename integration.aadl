@@ -73,6 +73,7 @@ properties
 end integration.single_partition_vxworks;
 
 
+
 system implementation integration.four_partitions
 subcomponents
 --	module : processor codegen_demo::platform::cpu_1part.generic;

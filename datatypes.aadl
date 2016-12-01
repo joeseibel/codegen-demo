@@ -5,14 +5,14 @@ with data_model;
 
 data real
 properties
-	Data_Size => 8 bytes;
+	Data_Size => 4 bytes;
 	data_model::data_representation => Float ;
 	Type_Source_Name => "double";
 end real;
 
 data int
 properties
-	Data_Size => 8 bytes;
+	Data_Size => 4 bytes;
 	data_model::data_representation => Float ;
 	Type_Source_Name => "int";
 end int;
