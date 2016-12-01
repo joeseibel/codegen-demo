@@ -13,6 +13,13 @@ The system includes three functions
 The example shows how to deploy the same system on the following targets:
  * DeOS
  * VxWorks653
+ 
+# Installing Ocarina
+Before proceeding, install Ocarina. You can download it on http://www.openaadl.org/download.html
+Make sure you have the latest version.
+Once you download it, configure OSATE to use Ocarina.
+Click on Windows -> Preferences. Select OSATE preferences and then, Ocarina.
+Enter the path where you installed Ocarina (the bin/ directory).
 
 # Generate the code
 In order to generate the code, you can do the following:
