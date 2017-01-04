@@ -27,26 +27,26 @@ In order to generate the code, you can do the following:
  * Select the main system implementation in the file integration.aadl
    The name of the root system depends on what tool you are
    using and what is the target platform. For example, for pok, 
-   the name of the root system is integration.single_partition_pok
-   is integration.four_partitions_pok
- * Select the system in the outline view. Right click, select Ocarina
-   menu and then the appropriate code generator
+   the name of the root system is integration.single_partition_pok.
+ * With the system selected, choose in the main menu *OSATE* -> *Ocarina Bridge* ->
+   then the appropriate code generator such as *Generate POK/VxWorks Code*.
 
  
 # Integrate generated code with VxWorks
-1. Start VxWorks workbench 3.2
-2. Select File->New->Examples and select VxWorks 653 System. Give the name mydemo for example
-3. Select the board support package simpc and finish.
-4. In the project mydemo_Partition1, copy the generated code for the partition.
-5. In the project mydemo_Partition1, copy the functional code
-6. In the project mydemo_Partition1, edit vxMain.c and make sure it looks like this
-
+* Start VxWorks workbench 3.2
+* Select File->New->Examples and select VxWorks 653 System. Give the name mydemo for example
+* Select the board support package simpc and finish.
+* Copy the generated code from OSATE in *codegen-demo/generated-code/module/pr* to VxWorks at *mydemo/mydemo_Partition1*
+* Copy the functional code from OSATE in *codegen-demo/functional/vxworks* to VxWorks at *mydemo/mydemo_Partition1*
+* In VxWorks, edit the file *mydemo/mydemo_Partition1/vxMain.c* and find the following line
 ```c
-              #define USER_APPL_INIT main()
+#define USER_APPL_INIT usrAppInit()
 ```
-
-7. Edit the file mydemo_PartitionOS/demo_PartitionOS.xml and make sure it looks like this
-
+Change the define to look like this:
+```c
+#define USER_APPL_INIT main()
+```
+* Edit the file mydemo_PartitionOS/demo_PartitionOS.xml and make sure it looks like this
 ```xml
 <Shared_Library_API
     xmlns="http://www.windriver.com/vxWorks653/SharedLibraryAPI"
@@ -62,21 +62,21 @@ In order to generate the code, you can do the following:
 
 </Shared_Library_API>
 ```
-
-7. Edit the file mydemo_PartitionOS/Makefile.vars and make sure it looks like this
-
+* Edit the file mydemo_PartitionOS/Makefile.vars and add *apexComponent.o* to *SSL_OBJS*:
 ```
 SSL_OBJS += vThreadsComponent.o apexComponent.o
 ```
+* Right click on *mydemo* and select *Build Project*.
 
 # Run with VxWorks
-1. Click on Target -> New Connection
-2. Select Simulator
-3. Select Customer Simulator.
-4. Choose the file boot.txt at the root of your project. If the file is not available, try
+1. Switch to the *Advanced Device Development* perspective.
+2. In the main menu, Click on Target -> New Connection
+3. Select *VxWorks 653* -> *Wind River VxWorks 653 Simulator Connection*.
+4. Select Customer Simulator.
+5. Choose the file boot.txt at the root of your project. If the file is not available, try
    to rebuild the project.
-5. Continue the wizard until the end
-6 In the remote system window, select the simulator and run it.
+6. Continue the wizard until the end. After finishing the wizard, the simulator will automatically run.
+7. To run the simulation again, in the remote system view, select the simulator and click on the *Connect* button.
 
 # Integrate generated code with DeOS
 
